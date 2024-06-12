@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c6skigau7brau"]
+
+[node name="Tower8" type="Node2D"]
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+text = "8"

@@ -1,0 +1,45 @@
+[gd_scene load_steps=14 format=3 uid="uid://bn1ueleto4n44"]
+
+[ext_resource type="Script" path="res://grid/grid.gd" id="1_yd2o0"]
+[ext_resource type="PackedScene" uid="uid://dpl5veqnuejbx" path="res://cell/cell.tscn" id="2_jxytg"]
+[ext_resource type="PackedScene" uid="uid://bn6x0n3cfc12o" path="res://grid_objects/tower_2.tscn" id="3_qvjfr"]
+[ext_resource type="PackedScene" uid="uid://cwv43kjvruv0u" path="res://grid_objects/tower_4.tscn" id="4_b2ukb"]
+[ext_resource type="PackedScene" uid="uid://c6skigau7brau" path="res://grid_objects/tower_8.tscn" id="5_shy3m"]
+[ext_resource type="PackedScene" uid="uid://ugfm0hw7chwm" path="res://grid_objects/tower_16.tscn" id="6_8o01m"]
+[ext_resource type="PackedScene" uid="uid://bcuvcifdk8aje" path="res://grid_objects/tower_32.tscn" id="7_dbqve"]
+[ext_resource type="PackedScene" uid="uid://diefk4f8rmvd8" path="res://grid_objects/tower_64.tscn" id="8_wow0e"]
+[ext_resource type="PackedScene" uid="uid://cve1f0gflob3j" path="res://grid_objects/tower_128.tscn" id="9_tguqk"]
+[ext_resource type="PackedScene" uid="uid://84usq35p7u7t" path="res://grid_objects/tower_256.tscn" id="10_10ea1"]
+[ext_resource type="PackedScene" uid="uid://dqv80kjg1k3g8" path="res://grid_objects/tower_512.tscn" id="11_mqp4f"]
+[ext_resource type="PackedScene" uid="uid://bwvnxwfrjxk0o" path="res://grid_objects/tower_1024.tscn" id="12_pum4b"]
+[ext_resource type="PackedScene" uid="uid://bq2n3sow1qhdr" path="res://grid_objects/tower_2048.tscn" id="13_h5nyi"]
+
+[node name="Grid" type="Node2D" node_paths=PackedStringArray("object_pool")]
+script = ExtResource("1_yd2o0")
+cell = ExtResource("2_jxytg")
+object_pool = [NodePath("ObjectPool/Tower2"), NodePath("ObjectPool/Tower4"), NodePath("ObjectPool/Tower8"), NodePath("ObjectPool/Tower16"), NodePath("ObjectPool/Tower32"), NodePath("ObjectPool/Tower64"), NodePath("ObjectPool/Tower128"), NodePath("ObjectPool/Tower256"), NodePath("ObjectPool/Tower512"), NodePath("ObjectPool/Tower1024"), NodePath("ObjectPool/Tower2048")]
+
+[node name="ObjectPool" type="Node2D" parent="."]
+visible = false
+
+[node name="Tower2" parent="ObjectPool" instance=ExtResource("3_qvjfr")]
+
+[node name="Tower4" parent="ObjectPool" instance=ExtResource("4_b2ukb")]
+
+[node name="Tower8" parent="ObjectPool" instance=ExtResource("5_shy3m")]
+
+[node name="Tower16" parent="ObjectPool" instance=ExtResource("6_8o01m")]
+
+[node name="Tower32" parent="ObjectPool" instance=ExtResource("7_dbqve")]
+
+[node name="Tower64" parent="ObjectPool" instance=ExtResource("8_wow0e")]
+
+[node name="Tower128" parent="ObjectPool" instance=ExtResource("9_tguqk")]
+
+[node name="Tower256" parent="ObjectPool" instance=ExtResource("10_10ea1")]
+
+[node name="Tower512" parent="ObjectPool" instance=ExtResource("11_mqp4f")]
+
+[node name="Tower1024" parent="ObjectPool" instance=ExtResource("12_pum4b")]
+
+[node name="Tower2048" parent="ObjectPool" instance=ExtResource("13_h5nyi")]
