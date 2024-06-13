@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://bn1ueleto4n44"]
 
 [ext_resource type="Script" path="res://grid/grid.gd" id="1_yd2o0"]
-[ext_resource type="PackedScene" uid="uid://dpl5veqnuejbx" path="res://cell/cell.tscn" id="2_jxytg"]
+[ext_resource type="PackedScene" uid="uid://dpl5veqnuejbx" path="res://cell/cell.tscn" id="2_v2h00"]
 [ext_resource type="PackedScene" uid="uid://bn6x0n3cfc12o" path="res://grid_objects/tower_2.tscn" id="3_qvjfr"]
 [ext_resource type="PackedScene" uid="uid://cwv43kjvruv0u" path="res://grid_objects/tower_4.tscn" id="4_b2ukb"]
 [ext_resource type="PackedScene" uid="uid://c6skigau7brau" path="res://grid_objects/tower_8.tscn" id="5_shy3m"]
@@ -16,7 +16,7 @@
 
 [node name="Grid" type="Node2D" node_paths=PackedStringArray("object_pool")]
 script = ExtResource("1_yd2o0")
-cell = ExtResource("2_jxytg")
+cell_prefab = ExtResource("2_v2h00")
 object_pool = [NodePath("ObjectPool/Tower2"), NodePath("ObjectPool/Tower4"), NodePath("ObjectPool/Tower8"), NodePath("ObjectPool/Tower16"), NodePath("ObjectPool/Tower32"), NodePath("ObjectPool/Tower64"), NodePath("ObjectPool/Tower128"), NodePath("ObjectPool/Tower256"), NodePath("ObjectPool/Tower512"), NodePath("ObjectPool/Tower1024"), NodePath("ObjectPool/Tower2048")]
 
 [node name="ObjectPool" type="Node2D" parent="."]

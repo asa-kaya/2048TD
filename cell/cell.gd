@@ -21,11 +21,12 @@ func get_neighbor(direction: Vector2) -> Cell:
 	return grid.get_neighbor_cell(self, direction)
 
 func update_object():
-	if value == 0:
-		return
-	
 	if object:
 		object.queue_free()
+		object = null
+	
+	if value == 0:
+		return
 
 	var idx := int(log(value) / log(2)) - 1
 	object = object_pool[idx].duplicate()

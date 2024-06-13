@@ -28,5 +28,12 @@ func _ready():
 #func _process(delta):
 	#run_manager.process(delta)
 
-#func _input(event):
-	#run_manager.input(event)
+func _unhandled_input(event):
+	if Input.is_action_just_pressed("shift_up"):
+		grid.shift(Grid.Direction.UP)
+	elif Input.is_action_just_pressed("shift_left"):
+		grid.shift(Grid.Direction.LEFT)
+	elif Input.is_action_just_pressed("shift_down"):
+		grid.shift(Grid.Direction.DOWN)
+	elif Input.is_action_just_pressed("shift_right"):
+		grid.shift(Grid.Direction.RIGHT)
