@@ -4,6 +4,7 @@ extends Node2D
 @onready var area: Area2D = $Area2D
 
 var value: int = 0
+var can_merge = true
 var grid: Grid
 
 var object: Node2D
@@ -27,7 +28,8 @@ func update_object():
 	
 	if value == 0:
 		return
-
+	
 	var idx := int(log(value) / log(2)) - 1
+	
 	object = object_pool[idx].duplicate()
 	add_child(object)

@@ -13,27 +13,29 @@ func _ready():
 	grid_layout.resize(grid_size.x * grid_size.y)
 	grid_layout.fill(0);
 	
-	var rand1 := randi_range(0, grid_layout.size() - 1)
-	var rand2 := randi_range(0, grid_layout.size() - 2)
-
-	grid_layout[rand1] = 2
-	grid_layout[rand2 if (rand2 < rand1) else (rand2 + 1)] = 2
 	# add holes to field when total size of items is less than 25% of the field size
 	#var threshold := int(grid_layout.size() * 0.25)
 
 	grid.setup(grid_layout, cell_size, grid_size.x, true)
 
+	grid.populate_random_empty_cell()
+	grid.populate_random_empty_cell()
+	
 	#run_manager.init(player)
 
 #func _process(delta):
 	#run_manager.process(delta)
 
 func _unhandled_input(event):
+	var grid_has_shifted := false
 	if Input.is_action_just_pressed("shift_up"):
-		grid.shift(Grid.Direction.UP)
+		grid_has_shifted = grid.shift(Grid.Direction.UP)
 	elif Input.is_action_just_pressed("shift_left"):
-		grid.shift(Grid.Direction.LEFT)
+		grid_has_shifted = grid.shift(Grid.Direction.LEFT)
 	elif Input.is_action_just_pressed("shift_down"):
-		grid.shift(Grid.Direction.DOWN)
+		grid_has_shifted = grid.shift(Grid.Direction.DOWN)
 	elif Input.is_action_just_pressed("shift_right"):
-		grid.shift(Grid.Direction.RIGHT)
+		grid_has_shifted = grid.shift(Grid.Direction.RIGHT)
+	
+	if grid_has_shifted:
+		grid.populate_random_empty_cell()

@@ -39,7 +39,7 @@ func setup(grid_layout: Array[int], size: int, width: int, is_player: bool, reve
 		c.update_object()
 
 
-func shift(direction: Direction):
+func shift(direction: Direction) -> bool:
 	print("shifting " + str(direction))
 
 	var shift_dir := Vector2i.ZERO
@@ -74,9 +74,17 @@ func shift(direction: Direction):
 		end_x =  - 1
 		end_y =  - 1
 	
+	var has_shifted = false
 	for x in range(start_x, end_x, scan_dir.x):
 		for y in range(start_y, end_y, scan_dir.y):
-			try_shift_cell_at(Vector2i(x, y), shift_dir)
+			if try_shift_cell_at(Vector2i(x, y), shift_dir):
+				has_shifted = true
+	
+	if has_shifted:
+		print("successfully shifted")
+		grid.map(func(cell): cell.can_merge = true)
+	
+	return has_shifted
 
 func try_shift_cell_at(grid_position: Vector2i, direction: Vector2i) -> bool:
 	var current_cell := get_cell(grid_position.x, grid_position.y)
@@ -84,14 +92,17 @@ func try_shift_cell_at(grid_position: Vector2i, direction: Vector2i) -> bool:
 	if current_cell.value == 0:
 		return false
 
-	var next_cell := get_cell(grid_position.x + direction.x, grid_position.y + direction.y, true)
+	var destination_cell := get_last_valid_cell_in_direction(grid_position, direction, current_cell.value, current_cell)
+	if destination_cell and (current_cell != destination_cell) and (current_cell.value == destination_cell.value or destination_cell.value == 0):
+		if destination_cell.value != 0:
+			destination_cell.can_merge = false
 
-	print("%d, %d" % [grid_position.x + direction.x, grid_position.y + direction.y])
-	if next_cell and (current_cell.value == next_cell.value or next_cell.value == 0):
-		next_cell.value += current_cell.value
+		destination_cell.value += current_cell.value
 		current_cell.value = 0
-		next_cell.update_object()
+
+		destination_cell.update_object()
 		current_cell.update_object()
+
 		return true
 	else:
 		return false
@@ -100,11 +111,22 @@ func get_last_valid_cell_in_direction(grid_position: Vector2i, direction: Vector
 	var next_position := Vector2i(grid_position.x + direction.x, grid_position.y + direction.y)
 	var next_cell := get_cell(next_position.x, next_position.y, true)
 
-	if next_cell == null or value != next_cell.value or next_cell.value != 0:
+	if (next_cell == null) or (not next_cell.can_merge) or (value != next_cell.value and next_cell.value != 0):
 		return cell
 	else:
 		return get_last_valid_cell_in_direction(next_position, direction, value, next_cell)
 	
+func populate_random_empty_cell():
+	var empty_cells: Array[Cell] = grid.filter(func(cell): return cell.value == 0)
+
+	# TODO this should cause a game over
+	if empty_cells.size() <= 0:
+		return
+
+	var randIdx := randi_range(0, empty_cells.size() - 1)
+
+	empty_cells[randIdx].value = 2
+	empty_cells[randIdx].update_object()
 
 func get_cell(x: int, y: int, supress_out_of_range: bool = false) -> Cell:
 	if not supress_out_of_range:
