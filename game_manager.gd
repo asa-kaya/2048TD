@@ -29,13 +29,13 @@ func _ready():
 func _unhandled_input(event):
 	var grid_has_shifted := false
 	if Input.is_action_just_pressed("shift_up"):
-		grid_has_shifted = grid.shift(Grid.Direction.UP)
+		grid_has_shifted = await grid.shift(Grid.Direction.UP)
 	elif Input.is_action_just_pressed("shift_left"):
-		grid_has_shifted = grid.shift(Grid.Direction.LEFT)
+		grid_has_shifted = await grid.shift(Grid.Direction.LEFT)
 	elif Input.is_action_just_pressed("shift_down"):
-		grid_has_shifted = grid.shift(Grid.Direction.DOWN)
+		grid_has_shifted = await grid.shift(Grid.Direction.DOWN)
 	elif Input.is_action_just_pressed("shift_right"):
-		grid_has_shifted = grid.shift(Grid.Direction.RIGHT)
+		grid_has_shifted = await grid.shift(Grid.Direction.RIGHT)
 	
 	if grid_has_shifted:
 		grid.populate_random_empty_cell()

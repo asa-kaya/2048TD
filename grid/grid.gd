@@ -3,6 +3,7 @@ extends Node2D
 
 @export var cell_prefab: PackedScene
 @export var object_pool: Array[Node2D]
+@export var shift_duration: float = 1
 #@onready var test := preload("res://battleships/common/cell_item/tiles/sea/sea_tile.tscn")
 
 enum Direction { UP, LEFT, DOWN, RIGHT }
@@ -13,6 +14,9 @@ var grid_width: int
 var grid_height: int
 var reversed: bool
 
+var active_tweens: Array[Tween]
+
+signal all_tweens_finished
 
 func setup(grid_layout: Array[int], size: int, width: int, is_player: bool, reverse: bool = false):
 	self.grid_width = width
@@ -36,7 +40,7 @@ func setup(grid_layout: Array[int], size: int, width: int, is_player: bool, reve
 		c.value = grid_layout[i]
 		add_child(c)
 
-		c.update_object()
+		c.update_object(true)
 
 
 func shift(direction: Direction) -> bool:
@@ -75,6 +79,7 @@ func shift(direction: Direction) -> bool:
 		end_y =  - 1
 	
 	var has_shifted = false
+	active_tweens = []
 	for x in range(start_x, end_x, scan_dir.x):
 		for y in range(start_y, end_y, scan_dir.y):
 			if try_shift_cell_at(Vector2i(x, y), shift_dir):
@@ -84,6 +89,8 @@ func shift(direction: Direction) -> bool:
 		print("successfully shifted")
 		grid.map(func(cell): cell.can_merge = true)
 	
+	await all_tweens_finished
+
 	return has_shifted
 
 func try_shift_cell_at(grid_position: Vector2i, direction: Vector2i) -> bool:
@@ -94,14 +101,26 @@ func try_shift_cell_at(grid_position: Vector2i, direction: Vector2i) -> bool:
 
 	var destination_cell := get_last_valid_cell_in_direction(grid_position, direction, current_cell.value, current_cell)
 	if destination_cell and (current_cell != destination_cell) and (current_cell.value == destination_cell.value or destination_cell.value == 0):
-		if destination_cell.value != 0:
+		var cells_merged := destination_cell.value != 0
+		if cells_merged:
 			destination_cell.can_merge = false
 
 		destination_cell.value += current_cell.value
 		current_cell.value = 0
 
-		destination_cell.update_object()
-		current_cell.update_object()
+		# animate cell shifting
+		var tween := get_tree().create_tween()
+		var tween_duration := absf(current_cell.global_position.distance_to(destination_cell.global_position) / cell_size) * shift_duration
+		tween.tween_property(current_cell.object, "global_position", destination_cell.global_position, tween_duration)
+		tween.tween_callback(func():
+			destination_cell.update_object(cells_merged)
+			current_cell.update_object(true)
+			active_tweens.pop_back()
+
+			if active_tweens.size() <= 0:
+				all_tweens_finished.emit()
+		)
+		active_tweens.push_back(tween)
 
 		return true
 	else:
@@ -126,7 +145,7 @@ func populate_random_empty_cell():
 	var randIdx := randi_range(0, empty_cells.size() - 1)
 
 	empty_cells[randIdx].value = 2
-	empty_cells[randIdx].update_object()
+	empty_cells[randIdx].update_object(true)
 
 func get_cell(x: int, y: int, supress_out_of_range: bool = false) -> Cell:
 	if not supress_out_of_range:

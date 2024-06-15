@@ -21,7 +21,7 @@ func _ready():
 func get_neighbor(direction: Vector2) -> Cell:
 	return grid.get_neighbor_cell(self, direction)
 
-func update_object():
+func update_object(do_popout_animation: bool):
 	if object:
 		object.queue_free()
 		object = null
@@ -32,4 +32,10 @@ func update_object():
 	var idx := int(log(value) / log(2)) - 1
 	
 	object = object_pool[idx].duplicate()
+	object.z_index = 2
 	add_child(object)
+
+	if do_popout_animation:
+		var popout_tween := get_tree().create_tween()
+		popout_tween.tween_property(object, "scale", scale * 1.2, 0.05)
+		popout_tween.tween_property(object, "scale", scale, 0.05)
