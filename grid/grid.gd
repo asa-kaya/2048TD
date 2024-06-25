@@ -86,7 +86,6 @@ func shift(direction: Direction) -> bool:
 				has_shifted = true
 	
 	if has_shifted:
-		print("successfully shifted")
 		grid.map(func(cell): cell.can_merge = true)
 	
 	await all_tweens_finished

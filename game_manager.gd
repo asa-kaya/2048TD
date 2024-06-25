@@ -5,6 +5,7 @@ extends Node2D
 @export var grid_size: Vector2i
 
 @onready var grid: Grid = $Grid
+@onready var spawner: SpawnManager = $Spawner
 #@onready var player := $Player
 #@onready var run_manager := $RunManager
 
@@ -12,18 +13,17 @@ func _ready():
 	var grid_layout: Array[int] = []
 	grid_layout.resize(grid_size.x * grid_size.y)
 	grid_layout.fill(0);
-	
-	# add holes to field when total size of items is less than 25% of the field size
-	#var threshold := int(grid_layout.size() * 0.25)
 
 	grid.setup(grid_layout, cell_size, grid_size.x, true)
 
 	grid.populate_random_empty_cell()
 	grid.populate_random_empty_cell()
 	
+	spawner.start()
 	#run_manager.init(player)
 
-#func _process(delta):
+func _process(delta):
+	spawner.process(delta)
 	#run_manager.process(delta)
 
 func _unhandled_input(event):
