@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://cell/cell.gd" id="1_m7btf"]
 
 [node name="Cell" type="Node2D"]
+y_sort_enabled = true
 script = ExtResource("1_m7btf")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

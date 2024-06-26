@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://dkn465lph85j0"]
+
+[ext_resource type="Script" path="res://player/objective_point.gd" id="1_tg6n4"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ggfbr"]
+radius = 64.0
+
+[node name="ObjectivePoint" type="Node2D"]
+script = ExtResource("1_tg6n4")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_ggfbr")
