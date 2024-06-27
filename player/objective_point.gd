@@ -4,8 +4,9 @@ extends Node2D
 @export var max_hp: int
 
 @onready var area: Area2D = $Area2D
+@onready var hp_label: RichTextLabel = $HPLabel
 
-var current_hp: int
+var current_hp: int = 1 : set = _set_current_hp
 
 signal hp_depleted
 
@@ -19,7 +20,11 @@ func _ready():
 
 func take_damage(value: int):
 	current_hp -= value
-	print("took %d damage (HP = %d/%d)" % [value, current_hp, max_hp])
+
+func _set_current_hp(value: int):
+	current_hp = value
+	hp_label.text = "[center]%d/%d[/center]" % [current_hp, max_hp]
+
 	if current_hp <= 0:
 		hp_depleted.emit()
 
